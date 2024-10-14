@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kosta.board.dao.FileDao">
+
+	<insert id="insertFile" parameterType="bfile" useGeneratedKeys="true" keyProperty="num">
+		insert into file (directory, name, size, contenttype, uploaddate)
+		values (#{directory}, #{name}, #{size}, #{contenttype}, curdate())
+	</insert>
+	
+	<delete id="deleteFile" parameterType="Integer">
+		delete from file where num=#{num}
+	</delete>
+
+</mapper>
