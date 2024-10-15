@@ -61,7 +61,7 @@ public class BaseballServiceImpl implements BaseballService {
 		return baseballDao.selectPlayerByNum(num);
 	}
 	
-	//7-1
+	//7-A
 	@Override
 	public Player playerInfoByBackNum(Integer backNum) throws Exception {
 		return baseballDao.selectPlayerByBackNum(backNum);
