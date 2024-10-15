@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="com.kosta.baseball.dao.BaseballDao">
+	
+	<!-- 팀등록 -->
+	<insert id="insertTeam" parameterType="team" useGeneratedKeys="true" keyProperty="num">
+		insert into team (name, loc) values (#{name}, #{loc})
+	</insert>
+	
+	<!-- 팀 번호로 팀 조회 -->
+	<select id="selectTeamByNum" parameterType="Integer" resultType="team">
+		select * from team where num=#{num}
+	</select>
+	
+	<!-- 팀 이름으로 팀 조회 -->
+	<select id="selectTeamByName" parameterType="String" resultType="team">
+		select * from team where name=#{name}
+	</select>
+	
+	<!-- 지역으로 팀 조회 -->
+	<select id="selectTeamByLoc" parameterType="String" resultType="team">
+		select * from team where loc=#{loc}
+	</select>
+	
+	<!-- 선수 등록 -->
+	<insert id="insertPlayer" parameterType="player" useGeneratedKeys="true" keyProperty="num">
+		insert into player (name, backNum, teamNum) values (#{name}, #{backNum}, #{teamNum})
+	</insert>
+	
+	<!-- 선수 조회(선수 번호로, 팀이름포함) -->
+	<select id="selectPlayerByNum" parameterType="Integer" resultType="player">
+		select p.*, t.name as teamName
+		from player p 
+		left join team t
+		on p.teamNum=t.num	
+		where p.num=#{num}
+	</select>
+	
+	<!-- 선수 조회(선수 이름으로, 팀이름포함) -->
+	<select id="selectPlayerByName" parameterType="String" resultType="player">
+		select p.*, t.name as teamName 
+		from player p 
+		left join team t 
+		on p.teamNum=t.num 
+		where p.name=#{name}
+	</select>
+	
+	<!-- 선수 조회(선수 등번호로, 팀이름포함) -->
+	<select id="selectPlayerByBackNum" parameterType="Integer" resultType="player">
+		select p.*, t.name as teamName 
+		from player p 
+		left join team t 
+		on p.teamNum=t.num 
+		where p.backNum=#{backNum}
+	</select>
+	
+	<!-- 특정팀 선수 목록 조회(팀번호로) -->
+	<select id="selectPlayerListByTeamNum" parameterType="Integer" resultType="player"> 
+		select * from player where teamNum=#{teamNum}
+	</select>
+	
+	<!-- 특정팀 선수 목록 조회(팀이름으로) -->
+	<select id="selectPlayerListByTeamName" parameterType="String" resultType="player">
+		select p.* 
+		from player p 
+		left join team t 
+		on p.teamNum=t.num 
+		where t.name=#{teamName}
+	</select>
+
+</mapper>
