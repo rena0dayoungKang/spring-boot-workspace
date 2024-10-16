@@ -38,11 +38,11 @@ h1 {
       </div>
       <div style="float:right;">
       	 <c:choose>
-      	 	<c:when test="${member == null}">
+      	 	<c:when test="${user == null}">
       	 		<a href="login">로그인</a> 
       	 	</c:when>
       	 	<c:otherwise>
-      	 		<b><span>[${member.id}]</span></b>&nbsp;
+      	 		<b><span>[${user.id}]</span></b>&nbsp;
       	 		<a href="logout">로그아웃</a>		
       	 	</c:otherwise>
       	 </c:choose>
