@@ -22,12 +22,12 @@ public class Test01 {
 		};
 		System.out.println(mf1.max(3, 4));
 
-		// lamda 방식
+		// lambda 방식
 		MyFunction1 mf2 = (x, y) -> x > y ? x : y;
 		System.out.println(mf2.max(3, 4));
 
-		// lamda 방식2
-		MyFunction2 mfm = () -> System.out.println("lamda test");
+		// lambda 방식2
+		MyFunction2 mfm = () -> System.out.println("lambda test");
 		mfm.myMethod();
 
 	}
