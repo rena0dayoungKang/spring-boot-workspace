@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.kosta.board.dto.MemberDto;
 import com.kosta.board.service.MemberService;
@@ -43,7 +44,7 @@ public class MemberController {
 		}
 	}
 	
-	@PostMapping("/memberDoubleId")
+	@PostMapping("/memberDoubldId")
 	@ResponseBody
 	public String memberDoubleId(@RequestParam("id") String id) {
 		try {
@@ -67,8 +68,11 @@ public class MemberController {
 	}
 	
 	@PostMapping("/join")
-	public String join(MemberDto memberDto, Model model) {
+	public String join(MemberDto memberDto, MultipartFile file, Model model) {
 		try {
+			if(file != null && !file.isEmpty()) {
+				memberDto.setProfileImage(file.getBytes());
+			}
 			memberService.join(memberDto);
 			return "login";
 		} catch (Exception e) {

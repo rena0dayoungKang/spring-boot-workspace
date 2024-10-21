@@ -27,8 +27,7 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public boolean checkDoubleId(String id) throws Exception {
-		// TODO Auto-generated method stub
-		return false;
+		return memberRepository.findById(id).isPresent();
 	}
 
 }

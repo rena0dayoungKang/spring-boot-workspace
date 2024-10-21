@@ -1,5 +1,6 @@
 package com.kosta.board.entitiy;
 
+import java.io.UnsupportedEncodingException;
 import java.sql.Date;
 
 import javax.persistence.Column;
@@ -13,6 +14,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
@@ -57,7 +59,7 @@ public class Board {
 	private Member member;
 	
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "imgFileName")
+	@JoinColumn(name = "imgFileNum")
 	private BFile imageFile;
 	
 	@OneToOne(fetch = FetchType.LAZY)
@@ -67,7 +69,8 @@ public class Board {
 	@Override
 	public String toString() {
 		return "Board [num=" + num + ", subject=" + subject + ", content=" + content + ", createDate=" + createDate
-				+ ", viewCount=" + viewCount + ", writer=" + member.getId() + "]";
+				+ ", viewCount=" + viewCount + ", writer=" + member.getId() + ", imageFileNum="+imageFile.getNum()
+				+ ", uploadFileName=" + uploadFile.getName()+"]";
 	}
 	
 	
@@ -79,9 +82,16 @@ public class Board {
 									.createDate(createDate)
 									.viewCount(viewCount)
 									.writer(member.getId())
-									.nickName(member.getNickname())
-									.profileImage(member.getProfileImage())
+									.nickname(member.getNickname())
 									.build();
+		if(member.getProfileImage() != null) {
+			try {
+				boardDto.setProfileImage(new String(Base64.encodeBase64(
+						member.getProfileImage()), "UTF-8"));
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+		}
 		if(imageFile != null) {
 			boardDto.setImgFileNum(imageFile.getNum());
 		}
@@ -90,48 +100,6 @@ public class Board {
 			boardDto.setUploadFileName(uploadFile.getName());
 		}
 		return boardDto;
-	}
-
-
-
-	
-
-
-
-	
-
-//	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-//	private Integer num;
-//	@OneToMany(mappedBy = "board", fetch = FetchType.LAZY)
-//	private List<Heart> heartList = new ArrayList<>();
-//	
-//	
-//	@Column
-//	private String subject;
-//	@Column
-//	private String content;
-//	
-//	//@Column
-//	//private String writer;  //member 테이블의 id와 연결 
-//	@ManyToOne(fetch = FetchType.LAZY)
-//	@JoinColumn(name = "writer")
-//	private Member member;	
-//	
-//	//@Column
-//	//private String filename; //bfile 테이블의 name과 연결
-//	@OneToOne(mappedBy = "board1",fetch = FetchType.LAZY)
-//	@JoinColumn(name = "fileName")
-//	private BFile bfile1;
-//	
-//	@Column
-//	private Date create_date;
-//	@Column
-//	private Integer view_cnt;
-//	
-//	@OneToOne(mappedBy = "board2", fetch = FetchType.LAZY)
-//	@JoinColumn(name = "dfilename")
-//	private BFile bfile2; //bfile 테이블의 name과 연결 
-	
-	
+	}	
 	
 }

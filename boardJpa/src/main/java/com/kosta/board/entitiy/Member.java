@@ -1,6 +1,7 @@
 package com.kosta.board.entitiy;
 
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.modelmapper.ModelMapper;
 
 import com.kosta.board.dto.MemberDto;
@@ -50,6 +52,8 @@ public class Member {
 	
 	@OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
 	private List<BoardLike> boardLikeList = new ArrayList<>();
+	//Member를 불러올 때마다 boardList, boardLikeList를 다 불러오기 때문에 속도, 성능저하가 된다. 
+	//(실무에서는 이렇게 잘 안씀) 
 
 	@Override
 	public String toString() {
@@ -59,30 +63,15 @@ public class Member {
 	
 	public MemberDto toDto() {
 		ModelMapper mapper = new ModelMapper();
-		return mapper.map(this, MemberDto.class);
+		MemberDto memberDto = mapper.map(this, MemberDto.class);
+		if (profileImage != null) {
+			try {
+				memberDto.setProfileImageStr(new String(Base64.encodeBase64(profileImage), "UTF-8"));
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+		}
+		return memberDto;
 	}
-
-	
-//	@Id
-//	private String id;  
-//	@OneToMany(mappedBy = "member", fetch = FetchType.LAZY)  //Board 테이블의 writer와 연결 
-//	private List<Board> boardList = new ArrayList<>();
-//	@OneToMany(mappedBy = "member", fetch = FetchType.LAZY)  //Heart 테이블의 memId와 연결 
-//	private List<Heart> heartList = new ArrayList<>();
-//	
-//	@Column
-//	private String name;
-//	@Column
-//	private String password;
-//	@Column
-//	private String email;
-//	@Column
-//	private String address;
-//	@Column
-//	private String nickname;
-//	
-//	@Column(columnDefinition = "BLOB")
-//	@Lob
-//	private byte[] profile_image;
 
 }

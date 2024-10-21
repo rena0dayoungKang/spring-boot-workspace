@@ -9,9 +9,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -23,6 +25,7 @@ public class MemberDto {
 	private String address;
 	private String nickname;
 	private byte[] profileImage;
+	private String profileImageStr; 
 	
 	public Member toEntity() {
 		ModelMapper mapper = new ModelMapper();  //gradle추가함

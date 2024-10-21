@@ -44,7 +44,7 @@ table {
 </head>
 <body>
 	<h2>게시판 글 수정</h2>
-	<form action="boardModify" method="post" enctype="multipart/form-data">
+	<form action="/boardModify" method="post" enctype="multipart/form-data">
 		<input type="hidden" name="num" value="${board.num }">
 		<table>
 			<tr>
@@ -68,18 +68,18 @@ table {
 				<td class="td_left"><label>이미지 파일 첨부</label></td>
 				<td class="td_right" onclick="document.getElementById('file').click();">
 					<c:choose>
-						<c:when test="${board.filename eq null}">
+						<c:when test="${board.imgFileNum eq null}">
 							<img src="resources/image/plus.png" width="50px" id="preview">	
 						</c:when>
 						<c:otherwise>
-							<img src="image/${board.filename }" width="100px" id="preview">
+							<img src="/image/${board.imgFileNum }" width="100px" id="preview">
 						</c:otherwise>
 					</c:choose>
 					</td>
 			</tr>
 			<tr>
 				<td class="td_left"><label>파일 첨부</label></td>
-				<td class="td_right" onclick="document.getElementById('dfile').click();"><span id="dFileName">${board.dfilename }</span></td>
+				<td class="td_right" onclick="document.getElementById('dfile').click();"><span id="dFileName">${board.uploadFileName }</span></td>
 			</tr>
 		</table>
 		<input type="file" name="file" id="file" accept="image/*" onchange="readURL(this);" style="display: none"> 

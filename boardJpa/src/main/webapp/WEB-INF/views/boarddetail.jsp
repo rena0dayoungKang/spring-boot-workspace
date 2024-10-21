@@ -18,7 +18,7 @@
 $(function() {
 	$('#heart').click(function() {
 		$.ajax({
-			url:'heart',
+			url:'/heart', 				//앞에 /를 꼭 붙여주어야한다
 			type:'post',
 			async:true,
 			dataType:'text',
@@ -63,13 +63,15 @@ $(function() {
 	<c:if test="${board.uploadFileName ne null}">
 		<tr>
 			<td class="td_left"><label>파일다운로드</label></td>
-			<td class="td_right"><a href="fileDown?file=${board.uploadFileName}">${board.uploadFileName }</a></td>
+			<td class="td_right"><a href="/fileDown?file=${board.uploadFileName}">${board.uploadFileName }</a></td>
 		</tr>
 	</c:if >
 </table>
 <br>
 <div id="commandCell">
-	<a href="boardModify?num=${board.num }">수정</a>&nbsp;&nbsp;&nbsp;
+	<c:if test="${member.id == board.writer }">
+		<a href="boardModify/${board.num }">수정</a>&nbsp;&nbsp;&nbsp;
+	</c:if>
 	<a href="boardList">목록</a>&nbsp;&nbsp;&nbsp;
 	<c:if test="${member.id ne null }">
 		<c:choose>

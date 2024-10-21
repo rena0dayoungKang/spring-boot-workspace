@@ -47,26 +47,7 @@ public class BFile {
 	
 	@OneToOne(mappedBy = "uploadFile", fetch = FetchType.LAZY)
 	private Board boardUpload;
-	
-	
-	
-//	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-//	private Integer num;
-//	@OneToOne(fetch = FetchType.LAZY)
-//	private Board board1;
-//	
-//	@Column
-//	private String directory;
-//	
-//	@Column
-//	private String name;
-//	@OneToOne(fetch = FetchType.LAZY)
-//	private Board board2;
-//	
-//	@Column
-//	private Long size;
-//	@Column
-//	private String contenttype;
-//	@Column
-//	private Date uploaddate;
+	//joinColumn이 없으면 뭐랑 연결되어 있는지 모르기 때문에, mappedBy로 알려준다. 
+	//개인마다 각자 정리해서 이해가 필요! 
+
 }
