@@ -1,0 +1,37 @@
+@charset "UTF-8";
+
+.header {
+	text-align: center;
+}
+
+.wrap {
+	margin: 0 auto;
+	border: 1px solid;
+	width: 350px;
+	padding: 10px;
+}
+
+.row {
+	height: 30px;
+	display: flex;
+	flex-direction: row;
+}
+
+.title {
+	float: left;
+	width: 70px;
+	text-align: center;
+	font-weight: bold;
+}
+
+.input {
+	float: left;
+}
+
+input[type='submit'] {
+	font-weight: bold;
+	width: 120px;
+	background-color: lightgray;
+	display: block;
+	margin: 0 auto;
+}
