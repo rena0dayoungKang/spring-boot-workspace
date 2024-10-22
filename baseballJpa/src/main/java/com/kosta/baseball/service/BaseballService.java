@@ -4,9 +4,6 @@ import java.util.List;
 
 import com.kosta.baseball.dto.PlayerDto;
 import com.kosta.baseball.dto.TeamDto;
-import com.kosta.baseball.entity.Player;
-import com.kosta.baseball.entity.Team;
-
 
 public interface BaseballService {
 	void registTeam(TeamDto teamDto) throws Exception; //1

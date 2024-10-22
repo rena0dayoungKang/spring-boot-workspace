@@ -2,7 +2,6 @@ package com.kosta.univ.entity;
 
 import java.sql.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -82,27 +81,5 @@ public class Student {
 		}
 		return studentDto;
 	}
-	
-	
-//	public StudentDto toDto() {
-//		return StudentDto.builder()
-//						 .studno(studno)
-//						 .name(name)
-//						 .id(id)
-//						 .grade(grade)
-//						 .jumin(jumin)
-//						 .birthday(birthday)
-//						 .tel(tel)
-//						 .height(height)
-//						 .weight(weight)
-//						 .deptno1(department1 != null ? department1.getDeptno() : null)
-//						 .dname1(department1 != null ? department1.getDname() : null)
-//						 .deptno2(department2 != null ? department2.getDeptno() : null)
-//						 .dname2(department2 != null ? department2.getDname() : null)
-//						 .profno(professor != null ? professor.getProfno() : null)
-//						 .profname(professor != null ? professor.getName() : null)
-//						 .build();
-//	}
-	
 	
 }

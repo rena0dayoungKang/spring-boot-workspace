@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kosta.baseball.dto.PlayerDto;
 import com.kosta.baseball.dto.TeamDto;
-import com.kosta.baseball.entity.Player;
-import com.kosta.baseball.entity.Team;
 import com.kosta.baseball.service.BaseballService;
 
 import lombok.RequiredArgsConstructor;
