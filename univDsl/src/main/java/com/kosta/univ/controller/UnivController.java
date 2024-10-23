@@ -35,10 +35,10 @@ public class UnivController {
 	}
 	
 	//2. 학생등록
-	@PostMapping("/regProf")
-	public ResponseEntity<String> registProfessor(@RequestBody ProfessorDto professorDto) {
+	@PostMapping("/regStud")
+	public ResponseEntity<String> registStudent(@RequestBody StudentDto studentDto) {
 		try {
-			univService.saveProfessor(professorDto);
+			univService.saveStudent(studentDto);
 			return new ResponseEntity<String>("true", HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -47,10 +47,10 @@ public class UnivController {
 	}
 	
 	//3. 교수등록
-	@PostMapping("/regStud")
-	public ResponseEntity<String> registStudent(@RequestBody StudentDto studentDto) {
+	@PostMapping("/regProf")
+	public ResponseEntity<String> registProfessor(@RequestBody ProfessorDto professorDto) {
 		try {
-			univService.saveStudent(studentDto);
+			univService.saveProfessor(professorDto);
 			return new ResponseEntity<String>("true", HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -25,7 +25,7 @@ public class ProfessorDto {
 	private String hpage;
 	
 	private Integer deptno;
-	private String dname;
+	private String dname; //extra
 	
 	public Professor toEntity() {
 		return Professor.builder()
