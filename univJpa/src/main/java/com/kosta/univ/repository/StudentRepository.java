@@ -14,7 +14,7 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
 	List<Student> findByGrade(Integer grade);
 	
 	//방식 1. 레포지토리를 명명규칙에 따라 만들고 테이블 관계가 있는 애들끼리 조회 
-	//findBy + 참조한 Entity명 + _ +참조한Entity의 컬럼명으로 작성하면 된다.
+	//findBy + 참조한 Entity명 + _ +참조한Entity의 컬럼명 + 기타 으로 작성하면 된다.
 //	List<Student> findByDepartment1_deptno(Integer deptno);
 //	List<Student> findByDepartment1_dname(String dname);
 	
