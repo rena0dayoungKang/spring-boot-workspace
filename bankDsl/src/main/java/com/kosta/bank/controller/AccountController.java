@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kosta.bank.dto.AccountDto;
-import com.kosta.bank.entity.Account;
 import com.kosta.bank.serivce.AccountService;
 
 import lombok.RequiredArgsConstructor;

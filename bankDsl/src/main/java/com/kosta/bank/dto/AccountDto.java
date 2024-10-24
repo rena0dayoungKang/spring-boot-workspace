@@ -1,8 +1,5 @@
 package com.kosta.bank.dto;
 
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.kosta.bank.entity.Account;
 
 import lombok.AllArgsConstructor;

@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.kosta.bank.dto.MemberDto;
-import com.kosta.bank.entity.Member;
 import com.kosta.bank.serivce.MemberService;
 
 import lombok.RequiredArgsConstructor;

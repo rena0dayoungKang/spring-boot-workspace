@@ -3,10 +3,6 @@ package com.kosta.bank.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Transient;
-
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.kosta.bank.dto.MemberDto;
 
