@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Join</title>
+</head>
+<body>
+<h1>회원가입</h1>
+<form action="/joinProc" method="post">
+	<input type="text" name="username" placeholder="username"/><br/>  <!-- username으로 안하려면 시큐리티 안에서 설정해주어야 한다 -->
+	<input type="password" name="password" placeholder="password"/><br/>
+	<input type="email" name="email" placeholder="email"/><br/>
+	<select name="roles">
+		<option value="ROLE_USER">USER</option>
+		<option value="ROLE_ADMIN">ADMIN</option>
+		<option value="ROLE_MANAGER">MANAGER</option>
+	</select>
+	<button>회원가입</button>
+</form>
+</body>
+</html>
