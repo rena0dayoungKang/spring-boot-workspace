@@ -1,14 +1,15 @@
 package com.kosta.sec.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.kosta.sec.auth.PrincipalDetails;
 import com.kosta.sec.entity.User;
 import com.kosta.sec.repository.UserRepository;
 
@@ -49,9 +50,20 @@ public class IndexController {
 		return "redirect:/";
 	}
 	
+	//방식1
 	@GetMapping("/user")
 	@ResponseBody
 	public String user() {
+		return "유저입니다.";
+	}
+	
+	//방식2
+	@GetMapping("/user1")
+	@ResponseBody
+	public String user1(@AuthenticationPrincipal PrincipalDetails principal) { 
+						//함수의 파라미터에 @AuthenticationPrincipal 생성도 가능한 방법
+		User user = principal.getUser();
+		System.out.println(user);
 		return "유저입니다.";
 	}
 	
