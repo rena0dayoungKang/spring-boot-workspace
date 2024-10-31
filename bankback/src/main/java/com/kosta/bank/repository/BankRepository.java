@@ -58,6 +58,7 @@ public class BankRepository {
 	}
 	
 	// 계좌이체
+	@Transactional
 	public void transfer(String sid, String rid, Integer sbalance, Integer rbalance) {
 //		QAccount sendAccount = QAccount.account;
 //		QAccount recvAccount = QAccount.account; <!-- 이렇게 하면 오류남, 한 쿼리는 한개만 -->

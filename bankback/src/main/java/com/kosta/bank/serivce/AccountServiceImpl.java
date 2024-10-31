@@ -2,7 +2,6 @@ package com.kosta.bank.serivce;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -52,16 +51,17 @@ public class AccountServiceImpl implements AccountService {
 		return bankRepository.findAllAccount().stream().map(i -> i.toDto()).collect(Collectors.toList());
 	}
 
+	
 	@Override
-	public void transfer(String sid, String rid, Integer money) throws Exception {
+	public Integer transfer(String sid, String rid, Integer money) throws Exception {
 		Account sacc = bankRepository.findAccountById(sid);
-		if (sacc == null) throw new Exception("보내는");
+		if (sacc == null) throw new Exception("보내는 계좌번호 오류");
 		sacc.withdraw(money);;
 		Account racc = bankRepository.findAccountById(rid);
-		if (racc == null) throw new Exception("받는");
+		if (racc == null) throw new Exception("받는 계좌번호 오류");
 		racc.deposit(money);
 		bankRepository.transfer(sid, rid, sacc.getBalance(), racc.getBalance());
-		
+		return sacc.getBalance();
 	}
 
 	@Override

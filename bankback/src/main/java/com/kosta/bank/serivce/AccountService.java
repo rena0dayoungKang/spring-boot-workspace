@@ -10,6 +10,6 @@ public interface AccountService {
 	AccountDto withdraw(String id,Integer money) throws Exception;
 	AccountDto accountinfo(String id) throws Exception;
 	List<AccountDto> allacountinfo() throws Exception;
-	void transfer(String sid,String rid,Integer money) throws Exception;
+	Integer transfer(String sid,String rid,Integer money) throws Exception;
 	boolean doubleId(String id) throws Exception;
 }
