@@ -13,6 +13,8 @@ import javax.persistence.ManyToOne;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -45,6 +47,7 @@ public class BFile {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "boardNum")
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Board board;
 
 	

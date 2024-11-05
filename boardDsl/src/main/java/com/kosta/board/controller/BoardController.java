@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -170,15 +171,15 @@ public class BoardController {
 		}
 	}
 	
+	
 	@GetMapping("/boardDelete/{num}")
-	public String boardDelete(@PathVariable Integer num, Model model) {
+	public ResponseEntity<String> boardDelete(@PathVariable Integer num) {
 		try {
 			boardService.boardDelete(num);
-			return "redirect:/boardList";
+			return new ResponseEntity<String>(String.valueOf(true), HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			model.addAttribute("err", e.getMessage());
-			return "err";
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
 		}
 	} 
 }

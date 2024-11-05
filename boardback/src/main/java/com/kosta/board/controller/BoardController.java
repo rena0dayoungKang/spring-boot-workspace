@@ -18,6 +18,7 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -51,13 +52,17 @@ public class BoardController {
 	}
 	
 	@GetMapping("/boardDetail/{num}")
-	public ResponseEntity<BoardDto> boardDetail(@PathVariable Integer num){
+	public ResponseEntity<Map<String, Object>> boardDetail(@PathVariable Integer num){
 		try {
+			Map<String, Object> res = new HashMap<>();
 			BoardDto boardDto = boardService.boardDetail(num);
-			return new ResponseEntity<BoardDto>(boardDto, HttpStatus.OK);
+			boolean heart = boardService.checkHeart(boardDto.getWriter(), num) != null;
+			res.put("board", boardDto);
+			res.put("heart", heart);
+			return new ResponseEntity<Map<String, Object>>(res, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<BoardDto>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Map<String, Object>>(HttpStatus.BAD_REQUEST);
 		}
 	}
 	
@@ -88,6 +93,43 @@ public class BoardController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<Map<String,Object>>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PostMapping("/boardModify")
+	public ResponseEntity<Integer> boardModify(BoardDto boardDto, 
+			@RequestParam(name="delFile", required = false) Integer[] delFileNum,
+			@RequestParam(name="file", required = false) MultipartFile[] fileList) {
+		try {
+			boardService.boardModify(boardDto, 
+					delFileNum == null? null : Arrays.asList(delFileNum), 
+					fileList == null? null : Arrays.asList(fileList));
+			return new ResponseEntity<Integer>(boardDto.getNum(), HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Integer>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@GetMapping("/boardDelete/{num}")
+	public ResponseEntity<String> boardDelete(@PathVariable Integer num) {
+		try {
+			boardService.boardDelete(num);
+			return new ResponseEntity<String>("true", HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		}
+	} 
+	
+	@PostMapping("/boardLike")
+	public ResponseEntity<String> boardLike(@RequestBody Map<String, String> param) {
+		try {
+			boolean heart = boardService.toggleHeart(param.get("id"), Integer.parseInt(param.get("num")));
+			return new ResponseEntity<String>(String.valueOf(heart), HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
 		}
 	}
 }

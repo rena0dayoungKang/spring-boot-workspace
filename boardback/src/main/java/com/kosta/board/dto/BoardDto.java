@@ -33,8 +33,7 @@ public class BoardDto {
 					.viewCount(viewCount)
 					.createDate(createDate)
 					.member(Member.builder().id(writer).build())
-					.build();
-		
+					.build();		
 		return board;
 	}
 	
