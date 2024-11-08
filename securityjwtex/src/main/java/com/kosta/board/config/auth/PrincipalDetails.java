@@ -2,23 +2,31 @@ package com.kosta.board.config.auth;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import com.kosta.board.entity.User;
 
 import lombok.Data;
 
 @Data
-public class PrincipalDetails implements UserDetails {
+public class PrincipalDetails implements UserDetails, OAuth2User {
 
 	private User user;
-	
+	private Map<String, Object> attributes;
+
 	public PrincipalDetails(User user) {
 		this.user = user;
 	}
-	
+
+	public PrincipalDetails(User user, Map<String, Object> attributes) {
+		this.user = user;
+		this.attributes = attributes;
+	}
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		Collection<GrantedAuthority> collect = new ArrayList<>();
@@ -33,7 +41,11 @@ public class PrincipalDetails implements UserDetails {
 
 	@Override
 	public String getUsername() {
-		return user.getUsername();
+		if (user != null) {
+			return user.getUsername();
+		} else {
+			return String.valueOf(attributes.get("id"));
+		}
 	}
 
 	@Override
@@ -54,6 +66,16 @@ public class PrincipalDetails implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		return true;
+	}
+
+	@Override
+	public Map<String, Object> getAttributes() {
+		return attributes;
+	}
+
+	@Override
+	public String getName() {
+		return user.getId() + "";
 	}
 
 }

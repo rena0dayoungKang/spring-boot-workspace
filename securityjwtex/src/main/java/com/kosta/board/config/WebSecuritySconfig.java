@@ -15,6 +15,7 @@ import org.springframework.web.filter.CorsFilter;
 
 import com.kosta.board.config.jwt.JwtAuthenticationFilter;
 import com.kosta.board.config.jwt.JwtAuthrizationFilter;
+import com.kosta.board.oauth.PrincipalOAuth2UserService;
 import com.kosta.board.repository.UserRepository;
 
 @Configuration // IoC빈 (Bean)등록
@@ -27,6 +28,9 @@ public class WebSecuritySconfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private PrincipalOAuth2UserService principalOAuth2UserService;
 
 	@Bean
 	public BCryptPasswordEncoder encoderPassword() {
@@ -45,7 +49,15 @@ public class WebSecuritySconfig extends WebSecurityConfigurerAdapter {
 				.addFilterAt(new JwtAuthenticationFilter(authenticationManager()),
 						UsernamePasswordAuthenticationFilter.class);
 		
-		// 
+		// OAuth2 Login
+		http.oauth2Login()
+			.authorizationEndpoint().baseUri("/oauth2/authorization")
+			.and()
+			.redirectionEndpoint().baseUri("/oauth2/callback/*")
+			.and()
+			.userInfoEndpoint().userService(principalOAuth2UserService);
+		
+		
 		http.addFilter(new JwtAuthrizationFilter(authenticationManager(), userRepository))
 			.authorizeRequests()
 			.antMatchers("/user/**").authenticated() //로그인 필수

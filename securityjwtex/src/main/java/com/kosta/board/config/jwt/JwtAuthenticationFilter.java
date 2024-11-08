@@ -39,6 +39,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		
 		String token = objectMapper.writeValueAsString(map); //map을 Json String으로 바꿔줌 
 		//System.err.println("map을 Json String으로 바꿔줌 "+token);
+		System.out.println(token);
 		
 		response.addHeader(JwtProperties.HEADER_STRING, token);
 		response.setContentType("application/json; charset=utf-8");

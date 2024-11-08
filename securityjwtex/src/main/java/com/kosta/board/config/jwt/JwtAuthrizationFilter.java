@@ -127,7 +127,7 @@ public class JwtAuthrizationFilter extends BasicAuthenticationFilter {
 				String reToken = objectMapper.writeValueAsString(map); //map -> jsonString
 				response.addHeader(JwtProperties.HEADER_STRING, reToken);
 				response.setContentType("application/json; charset=utf-8");
-				//response.getWriter().print("token");
+				response.getWriter().print("token");//토큰을 다시 줄거야 하는 나만의방법이야
 				
 			} catch (Exception e2) {
 				e2.printStackTrace();

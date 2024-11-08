@@ -6,4 +6,5 @@ import com.kosta.board.entity.User;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
 	public User findByUsername(String username);
+	public User findByProviderAndProviderId(String provider, String providerId);
 }
