@@ -12,7 +12,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity // 필터 체인 관리 시작 어노테이션. 시큐리티 사용하는 어노테이션
 //@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true) 
 //컨트롤러 url을 각각 주어서 권한을 확인할 수 있는 어노테이션,  prePostEnabled, securedEnabled
-public class SecurityController {
+public class SecurityConfig {
 
 	@Bean 
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
