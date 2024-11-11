@@ -132,4 +132,23 @@ public class BoardController {
 			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	@GetMapping("/fileDown")
+	public void fileDown(@RequestParam("file") String filename, HttpServletResponse response) {
+		try {
+			FileInputStream fis = new FileInputStream(new File(uploadPath, filename));
+
+			// 파일 형식 얻어옴
+			String mimeType = "application/octet-stream"; // octet-stream : 8비트로 된 일련의 데이터를 뜻함. 지정되지 않은 파일 타입을 의미
+			
+			response.setContentType(mimeType);
+			String encoding = new String(filename.getBytes("utf-8"), "8859_1"); // 한글 파일명 깨짐 방지
+			response.setHeader("content-Disposition", "attachment; filename= " + encoding);
+
+			FileCopyUtils.copy(fis, response.getOutputStream());
+			fis.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

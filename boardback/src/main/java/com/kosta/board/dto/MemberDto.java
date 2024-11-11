@@ -1,5 +1,11 @@
 package com.kosta.board.dto;
 
+import java.sql.Timestamp;
+
+import javax.persistence.Column;
+
+import org.hibernate.annotations.CreationTimestamp;
+
 import com.kosta.board.entity.Member;
 
 import lombok.AllArgsConstructor;
@@ -24,6 +30,10 @@ public class MemberDto {
 	private String address;
 	private byte[] profileImage;
 	private String profileImageStr; 
+	private String roles;
+	private Timestamp createDate;
+	private String provider;
+	private String providerId;
 	
 	public Member toEntity() {
 		return Member.builder()
@@ -34,6 +44,7 @@ public class MemberDto {
 					 .email(email)
 					 .address(address)
 					 .profileImage(profileImage)
+					 .roles(roles)
 					 .build();
 	}
 }

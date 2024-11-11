@@ -1,6 +1,7 @@
 package com.kosta.board.entity;
 
 import java.io.UnsupportedEncodingException;
+import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 
 import org.apache.tomcat.util.codec.binary.Base64;
+import org.hibernate.annotations.CreationTimestamp;
 
 import com.kosta.board.dto.MemberDto;
 
@@ -34,6 +36,16 @@ public class Member {
 	private String email;
 	@Column
 	private String address;
+	
+	private String roles;
+	@CreationTimestamp
+	private Timestamp createDate;
+		
+	//OAuth를 위해 구성한 필드
+	@Column
+	private String provider;
+	@Column
+	private String providerId;
 	
 	@Column(columnDefinition = "MEDIUMBLOB")
 	@Lob

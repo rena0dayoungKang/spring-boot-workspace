@@ -1,4 +1,4 @@
-package com.kosta.board.oauth;
+package com.kosta.board.config.oauth;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -8,14 +8,14 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import com.kosta.board.config.auth.PrincipalDetails;
-import com.kosta.board.entity.User;
-import com.kosta.board.repository.UserRepository;
+import com.kosta.board.entity.Member;
+import com.kosta.board.repository.MemberRepository;
 
 @Service
 public class PrincipalOAuth2UserService extends DefaultOAuth2UserService {
 	
 	@Autowired
-	private UserRepository userRepository;
+	private MemberRepository userRepository;
 
 	@Override
 	public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -46,14 +46,14 @@ public class PrincipalOAuth2UserService extends DefaultOAuth2UserService {
 		}
 		
 		//1. DB에서 조회
-		User user = userRepository.findByProviderAndProviderId(oAuth2UserInfo.getProvider(), oAuth2UserInfo.getProviderId());
+		Member user = userRepository.findByProviderAndProviderId(oAuth2UserInfo.getProvider(), oAuth2UserInfo.getProviderId());
 
 		if (user != null) {  //1-1. 이미 가입되어 있으면 정보 수정
 			user.setEmail(oAuth2UserInfo.getEmail());
 			userRepository.save(user);
 		} else {  //1-2. 가입되어 있지 않으면 삽입
-			User nUser = User.builder()
-								.username(oAuth2UserInfo.getProviderId())
+			Member nUser = Member.builder()
+								.id(oAuth2UserInfo.getProviderId())
 								.email(oAuth2UserInfo.getEmail())
 								.roles("ROLE_USER")
 								.provider(oAuth2UserInfo.getProvider())

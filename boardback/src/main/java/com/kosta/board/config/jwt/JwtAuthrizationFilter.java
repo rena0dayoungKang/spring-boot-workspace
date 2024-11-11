@@ -3,6 +3,7 @@ package com.kosta.board.config.jwt;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -14,24 +15,24 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-import org.springframework.stereotype.Component;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kosta.board.config.auth.PrincipalDetails;
-import com.kosta.board.entity.User;
-import com.kosta.board.repository.UserRepository;
+import com.kosta.board.entity.Member;
+import com.kosta.board.repository.MemberRepository;
+
 
 //인가 : 로그인 처리가 되어야만 하는 처리가 들어왔을 때 실행
 public class JwtAuthrizationFilter extends BasicAuthenticationFilter {
 
 	@Autowired
-	private UserRepository userRepository;
+	private MemberRepository userRepository;
 	
 	private JwtToken jwtToken = new JwtToken();
 
-	public JwtAuthrizationFilter(AuthenticationManager authenticationManager, UserRepository userRepository) {
+	public JwtAuthrizationFilter(AuthenticationManager authenticationManager, MemberRepository userRepository) {
 		super(authenticationManager);
 		this.userRepository = userRepository;
 	}
@@ -43,7 +44,6 @@ public class JwtAuthrizationFilter extends BasicAuthenticationFilter {
 		System.out.println("JwtAuthrizationFilter==============================");
 		String uri = request.getRequestURI();
 		System.out.println("JwtAuthrizationFilter:"+uri);
-		System.out.println("JwtAuthrizationFilter==============================");
 		// 1. 로그인 (인증) 이 필요없는 요청은 그대로 진행
 		if (!(uri.contains("/user") || uri.contains("/admin") || uri.contains("/manager"))) {
 			chain.doFilter(request, response);
@@ -52,7 +52,6 @@ public class JwtAuthrizationFilter extends BasicAuthenticationFilter {
 
 		// 2. 토큰을 체크
 		String authentication = request.getHeader(JwtProperties.HEADER_STRING);
-		System.out.println(authentication);
 		if (authentication == null) {
 			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "로그인 필요함");
 			return;
@@ -60,6 +59,7 @@ public class JwtAuthrizationFilter extends BasicAuthenticationFilter {
 
 		ObjectMapper objectMapper = new ObjectMapper();
 		Map<String, String> token = objectMapper.readValue(authentication, Map.class);
+		
 		System.out.println("token to Map : " + token);
 
 		// 3. access Token : header로 부터 access Token을 가져와 check
@@ -76,17 +76,19 @@ public class JwtAuthrizationFilter extends BasicAuthenticationFilter {
 		try {
 			// 1) Access Token
 			// 1-1)보안키, 만료시간 check
-			String username = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build().verify(accessToken)
-					.getClaim("sub").asString();
+			String username = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET))
+								.build()
+								.verify(accessToken)
+								.getClaim("sub")
+								.asString();
+			
 			System.out.println("username:" + username);
 
 			// 1-2) username check
-			if (username == null || username.equals(""))
-				throw new Exception("사용자가 없음"); // 사용자가 없을 때 exception
-
-			User user = userRepository.findByUsername(username);
-			if (user == null)
-				throw new Exception("사용자가 없음"); // 사용자가 DB에 없을때
+			if (username == null || username.equals("")) throw new Exception();
+			Optional<Member> ouser = userRepository.findById(username);
+			if (ouser.isEmpty()) throw new Exception(); //사용자가 DB에 없을때
+			Member user = ouser.get();	
 
 			// 성공했다면
 			// 1-3) User를 Authentication로 생성하여 Security Session에 넣어준다. (그러면 Controller에서 사용할
@@ -119,9 +121,9 @@ public class JwtAuthrizationFilter extends BasicAuthenticationFilter {
 				System.out.println("username" + username);
 				//2-2) username check
 				if (username == null || username.equals("")) throw new Exception("사용자가 없음"); // 사용자가 DB에 없을때
-				User user = userRepository.findByUsername(username);
-				System.out.println(user);
-				if (user == null) throw new Exception("사용자가 없음"); // 사용자가 DB에 없을때
+				Optional<Member> ouser = userRepository.findById(username);
+//				System.out.println(user);
+				if (ouser.isEmpty()) throw new Exception("사용자가 없음"); // 사용자가 DB에 없을때
 				
 				//accessToken, refreshToken 다시 만들어 보낸다.
 				String reAccessToken = jwtToken.makeAccessToken(username);
@@ -140,8 +142,6 @@ public class JwtAuthrizationFilter extends BasicAuthenticationFilter {
 				response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "로그인 필요");
 			}
 		}
-
-		super.doFilterInternal(request, response, chain);
 	}
 
 }

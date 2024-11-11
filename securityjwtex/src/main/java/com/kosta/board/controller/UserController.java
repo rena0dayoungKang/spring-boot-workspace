@@ -36,6 +36,7 @@ public class UserController {
 		user.setPassword(bCryptPasswordEncoder.encode(rawPassword));
 		user.setRoles("ROLE_USER");
 		userRepository.save(user);
+		System.out.println("controller:"+user);
 		return new ResponseEntity<String>("true", HttpStatus.OK);
 		
 	}

@@ -3,7 +3,6 @@ package com.kosta.board.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -15,9 +14,9 @@ import org.springframework.web.filter.CorsFilter;
 
 import com.kosta.board.config.jwt.JwtAuthenticationFilter;
 import com.kosta.board.config.jwt.JwtAuthrizationFilter;
-import com.kosta.board.oauth.OAuth2SuccessHandler;
-import com.kosta.board.oauth.PrincipalOAuth2UserService;
-import com.kosta.board.repository.UserRepository;
+import com.kosta.board.config.oauth.OAuth2SuccessHandler;
+import com.kosta.board.config.oauth.PrincipalOAuth2UserService;
+import com.kosta.board.repository.MemberRepository;
 
 @Configuration // IoC빈 (Bean)등록
 @EnableWebSecurity // 필터 체인 관리 시작 어노테이션
@@ -28,7 +27,7 @@ public class WebSecuritySconfig extends WebSecurityConfigurerAdapter {
 	private CorsFilter corsFilter;
 	
 	@Autowired
-	private UserRepository userRepository;
+	private MemberRepository userRepository;
 	
 	@Autowired
 	private OAuth2SuccessHandler oAuth2SuccessHandler;
@@ -57,7 +56,7 @@ public class WebSecuritySconfig extends WebSecurityConfigurerAdapter {
 		http.oauth2Login()
 			.authorizationEndpoint().baseUri("/oauth2/authorization")
 			.and()
-			.redirectionEndpoint().baseUri("/oauth2/callback/*")
+			.redirectionEndpoint().baseUri("/login/oauth2/code/*")
 			.and()
 			.userInfoEndpoint().userService(principalOAuth2UserService)
 			.and()

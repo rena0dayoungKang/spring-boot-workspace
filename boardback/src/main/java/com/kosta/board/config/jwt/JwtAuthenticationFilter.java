@@ -45,7 +45,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		
 		response.addHeader(JwtProperties.HEADER_STRING, token);
 		response.setContentType("application/json; charset=utf-8");
-		
+		response.getWriter().write("true");
 	}
 	
 	
