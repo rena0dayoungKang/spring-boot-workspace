@@ -14,15 +14,16 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.kosta.board.config.auth.PrincipalDetails;
 import com.kosta.board.dto.BoardDto;
 import com.kosta.board.service.BoardService;
 import com.kosta.board.util.PageInfo;
@@ -39,7 +40,7 @@ public class BoardController {
 	@Value("${upload.path}")
 	private String uploadPath;
 
-	@PostMapping("/boardWrite")
+	@PostMapping("/user/boardWrite")
 	public ResponseEntity<String> boardWrite(BoardDto boardDto,
 			@RequestParam(name = "file", required = false) MultipartFile[] files) {
 		try {
@@ -56,9 +57,13 @@ public class BoardController {
 		try {
 			Map<String, Object> res = new HashMap<>();
 			BoardDto boardDto = boardService.boardDetail(num);
-			boolean heart = boardService.checkHeart(boardDto.getWriter(), num) != null;
 			res.put("board", boardDto);
-			res.put("heart", heart);
+			if(authentication != null && authentication.getPrincipal() != null) {
+				String id = ((PrincipalDetails)authentication.getPrincipal()).getUser().getId();
+				System.out.println(id);
+				boolean heart = boardService.checkHeart(id, num) != null;
+				res.put("heart", heart);
+			}
 			return new ResponseEntity<Map<String, Object>>(res, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -96,7 +101,7 @@ public class BoardController {
 		}
 	}
 	
-	@PostMapping("/boardModify")
+	@PostMapping("/user/boardModify")
 	public ResponseEntity<Integer> boardModify(BoardDto boardDto, 
 			@RequestParam(name="delFile", required = false) Integer[] delFileNum,
 			@RequestParam(name="file", required = false) MultipartFile[] fileList) {
@@ -111,7 +116,7 @@ public class BoardController {
 		}
 	}
 	
-	@GetMapping("/boardDelete/{num}")
+	@GetMapping("/user/boardDelete/{num}")
 	public ResponseEntity<String> boardDelete(@PathVariable Integer num) {
 		try {
 			boardService.boardDelete(num);
@@ -122,10 +127,11 @@ public class BoardController {
 		}
 	} 
 	
-	@PostMapping("/boardLike")
-	public ResponseEntity<String> boardLike(@RequestBody Map<String, String> param) {
+	@PostMapping("/user/boardLike")
+	public ResponseEntity<String> boardLike(Authentication authentication, @RequestParam("boardNum") Integer boardNum) {
 		try {
-			boolean heart = boardService.toggleHeart(param.get("id"), Integer.parseInt(param.get("num")));
+			String id = ((PrincipalDetails)authentication.getPrincipal()).getUser().getId();
+			boolean heart = boardService.toggleHeart(id, boardNum);
 			return new ResponseEntity<String>(String.valueOf(heart), HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();

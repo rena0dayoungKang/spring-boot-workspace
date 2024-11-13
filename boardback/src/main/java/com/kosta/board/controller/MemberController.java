@@ -55,10 +55,10 @@ public class MemberController {
 	}
 	
 	@GetMapping("/user") 
-	public ResponseEntity<MemberDto> getMember(Authentication authentication) {
+	public ResponseEntity<MemberDto> user(Authentication authentication) {
 		PrincipalDetails principalDetails = (PrincipalDetails)authentication.getPrincipal();
-		Member user = principalDetails.getUser();	
-		System.out.println("controller:"+user);
+		Member user = (Member)principalDetails.getUser();
+		System.out.println("controller : "+user);
 		return new ResponseEntity<MemberDto>(user.toDto(), HttpStatus.OK);
 	}
 	
